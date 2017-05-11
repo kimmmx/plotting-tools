@@ -45,16 +45,18 @@ def create_histogram(src_csv, dst_html, title=None, subtitle=None,
     if not y_axis_name:
         y_axis_name = y_axis_header
 
-    # Convert source to list of lists
+    # Convert source to list of lists, convert x-axis to category list for labels
     hist_data = []
+    hist_categories = []  # Explicitly define x-axis categories to workaround zoom glitch
     for index, row in src_df.iterrows():
         hist_data.append([str(row[x_axis_header]), float(row[y_axis_header])])
+        hist_categories.append(str(row[x_axis_header]))
 
     # Define chart options
     options = {
         'chart': {
             'type': 'column',
-            # 'zoomType': 'x'  # Causes incorrect x-axis labels when zoomed out too far
+            'zoomType': 'x'  # Causes incorrect x-axis labels if categories are not explicitly defined
         },
         'title': {
             'text': title
@@ -64,6 +66,7 @@ def create_histogram(src_csv, dst_html, title=None, subtitle=None,
         },
         'xAxis': {
             'type': 'category',
+            'categories': hist_categories,
             'title': {
                 'text': x_axis_name
             }
