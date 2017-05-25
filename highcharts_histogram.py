@@ -4,12 +4,12 @@ import pandas as pd
 from highcharts import Highchart
 
 
-def create_histogram(src_csv, dst_html, title=None, subtitle=None,
+def create_histogram(src, dst_html, title=None, subtitle=None,
                      x_axis_header=None, y_axis_header=None, x_axis_name=None, y_axis_name=None):
     """Creates basic histogram using Highcharts
 
         Args:
-            src_csv (string): Path to csv with source data
+            src (string or DataFrame): Path to csv with source data or DataFrame with source data.
             dst_html (string): Path to destination html output
             title (string): Title of histogram
             subtitle (string): Subtitle of histogram
@@ -31,7 +31,10 @@ def create_histogram(src_csv, dst_html, title=None, subtitle=None,
         dst_html += '.html'
 
     # Import source csv into pandas DataFrame
-    src_df = pd.read_csv(src_csv)
+    if type(src) == 'str':
+        src_df = pd.read_csv(src)
+    elif isinstance(src, pd.core.frame.DataFrame):
+        src_df = src
 
     # Define headers if not given
     if not x_axis_header:
